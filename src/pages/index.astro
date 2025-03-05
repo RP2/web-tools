@@ -1,9 +1,28 @@
 ---
 import Layout from "../layouts/Layout.astro";
+const tools = Object.values(
+  import.meta.glob("./tools/*.astro", { eager: true }),
+);
 ---
 
 <Layout
   title="Riley's Web Tools"
   description="A small collection of free and open source utilities for your daily tasks."
   tags="free, open source, private, web-based, tools"
-/>
+>
+  <ul class="ml-5 mt-4 text-2xl space-y-2">
+    {
+      tools.map((tool: any) => (
+        <li>
+          <a class="hover:underline" href={tool.url}>
+            {tool.url
+              .split("/")
+              .pop()
+              .replace(/[-_]/g, " ")
+              .replace(/\b\w/g, (match: any) => match.toUpperCase())}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
