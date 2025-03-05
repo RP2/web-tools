@@ -7,6 +7,107 @@ import Layout from "../../layouts/Layout.astro";
   description="Compare two strings or numbers and see if they match, great for verifying hashes."
   tags="free, open source, private, web based, tool, diff, checker, verify, hash"
 >
-  <textarea id="input1" placeholder="Enter something here..."></textarea>
-  <textarea id="input2" placeholder="Compare it to this..."></textarea>
+  <a href="/" class="absolute top-0 left-0 p-4 hover:underline">Go Back</a>
+  <div class="mx-auto flex max-w-3xl flex-col gap-4 p-4">
+    <div class="flex items-center justify-end gap-2">
+      <label class="text-sm text-gray-600">
+        <select id="hashMode" class="rounded border border-gray-300 px-2 py-1">
+          <option value="none">Normal Text Mode</option>
+          <option value="md5">MD5 Hash</option>
+          <option value="sha1">SHA-1 Hash</option>
+          <option value="sha256">SHA-256 Hash</option>
+          <option value="sha512">SHA-512 Hash</option>
+        </select>
+      </label>
+    </div>
+    <textarea
+      id="input1"
+      placeholder="Paste something here..."
+      class="min-h-[150px] w-full rounded border border-gray-300 p-4 font-mono focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+    ></textarea>
+    <div class="text-right text-sm text-gray-600" id="count1">
+      Characters: 0
+    </div>
+    <textarea
+      id="input2"
+      placeholder="Compare it to this..."
+      class="min-h-[150px] w-full rounded border border-gray-300 p-4 font-mono focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+    ></textarea>
+    <div class="text-right text-sm text-gray-600" id="count2">
+      Characters: 0
+    </div>
+    <div id="result" class="text-center text-xl font-bold"></div>
+  </div>
 </Layout>
+
+<script>
+  const input1 = document.getElementById("input1") as HTMLTextAreaElement;
+  const input2 = document.getElementById("input2") as HTMLTextAreaElement;
+  const result = document.getElementById("result") as HTMLDivElement;
+  const count1 = document.getElementById("count1") as HTMLDivElement;
+  const count2 = document.getElementById("count2") as HTMLDivElement;
+  const hashMode = document.getElementById("hashMode") as HTMLSelectElement;
+
+  const HASH_REGEX = {
+    md5: /^[a-fA-F0-9]{32}$/,
+    sha1: /^[a-fA-F0-9]{40}$/,
+    sha256: /^[a-fA-F0-9]{64}$/,
+    sha512: /^[a-fA-F0-9]{128}$/,
+  };
+
+  function validateHash(text: string, mode: string): boolean {
+    if (mode === "none") return true;
+    return HASH_REGEX[mode as keyof typeof HASH_REGEX].test(text);
+  }
+
+  function updateCharCount(
+    input: HTMLTextAreaElement,
+    display: HTMLDivElement,
+  ) {
+    const count = input.value.length;
+    display.textContent = `Characters: ${count}`;
+  }
+
+  function compareInputs() {
+    let text1 = input1.value;
+    let text2 = input2.value;
+    const mode = hashMode.value;
+
+    if (mode !== "none") {
+      // Remove all whitespace for hash comparison
+      text1 = text1.replace(/\s/g, "");
+      text2 = text2.replace(/\s/g, "");
+
+      // Validate hash format
+      const validHash1 = validateHash(text1, mode);
+      const validHash2 = validateHash(text2, mode);
+
+      if (!validHash1 || !validHash2) {
+        const hashType = mode.toUpperCase();
+        result.textContent = `Invalid ${hashType} hash format`;
+        result.className = "text-center text-xl font-bold text-yellow-600";
+        return;
+      }
+    } else {
+      // Normal text comparison - trim whitespace and ignore case
+      text1 = text1.trim().toLowerCase();
+      text2 = text2.trim().toLowerCase();
+    }
+
+    const matches = text1 === text2;
+    result.textContent = matches ? "Match!" : "No match";
+    result.className = `text-center text-xl font-bold ${matches ? "text-green-600" : "text-red-600"}`;
+  }
+
+  input1.addEventListener("input", () => {
+    updateCharCount(input1, count1);
+    compareInputs();
+  });
+
+  input2.addEventListener("input", () => {
+    updateCharCount(input2, count2);
+    compareInputs();
+  });
+
+  hashMode.addEventListener("change", compareInputs);
+</script>
