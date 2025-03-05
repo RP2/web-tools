@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "@fontsource/roboto/400.css";
 @import "@fontsource/roboto-mono";
-@import "@fontsource/roboto/800.css";
+@import "@fontsource/roboto/600.css";
 @theme {
   --font-sans: "Roboto", "serif";
   --font-mono: "Roboto Mono", "monospace";
