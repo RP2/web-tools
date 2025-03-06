@@ -6,4 +6,215 @@ import Layout from "../../layouts/Layout.astro";
   title="Teleprompter - Riley's Web Tools"
   description="Free and open-source teleprompter for your presentations, paste in your text and let it scroll."
   tags="free, open source, private, web based, tool, teleprompter, presentation, text, scrolling"
-/>
+>
+  <div class="mx-auto flex max-w-2xl flex-col gap-6 p-4">
+    <a
+      href="/"
+      class="absolute top-0 left-0 p-4 text-neutral-600 hover:text-neutral-900"
+      >Go Back</a
+    >
+    <textarea
+      id="script"
+      placeholder="Paste your script here..."
+      class="font-roboto min-h-[200px] w-full rounded border border-neutral-200 bg-white p-4 text-neutral-800 focus:border-neutral-400 focus:outline-none"
+    ></textarea>
+    <div class="flex flex-col gap-4 rounded border border-neutral-200 p-4">
+      <div class="flex items-center justify-between">
+        <label class="text-sm text-neutral-600" for="fontSize"
+          >Font Size: <span id="fontSizeValue">8</span>vw</label
+        >
+        <input
+          type="range"
+          id="fontSize"
+          min="4"
+          max="12"
+          value="8"
+          class="w-48"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="text-sm text-neutral-600" for="scrollSpeed">
+          Speed: <span id="speedValue">150</span> WPM
+        </label>
+        <input
+          type="range"
+          id="scrollSpeed"
+          min="50"
+          max="200"
+          value="150"
+          class="w-48"
+        />
+      </div>
+    </div>
+    <button
+      id="start"
+      class="font-roboto mx-auto rounded bg-neutral-800 px-6 py-2 text-white hover:bg-neutral-700"
+    >
+      Start Teleprompter
+    </button>
+  </div>
+  <div id="prompter" class="fixed inset-0 hidden bg-black">
+    <button
+      id="close"
+      class="absolute top-4 right-4 z-10 rounded-full bg-neutral-800 p-2 text-white hover:bg-neutral-700"
+      aria-label="Close teleprompter"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+          clip-rule="evenodd"></path>
+      </svg>
+    </button>
+    <div
+      id="content"
+      class="font-roboto mx-auto h-screen max-w-[90vw] p-8 text-[8vw] leading-normal tracking-wide text-white"
+    >
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { animate } from "motion";
+
+  const script = document.getElementById("script") as HTMLTextAreaElement;
+  const start = document.getElementById("start") as HTMLButtonElement;
+  const prompter = document.getElementById("prompter") as HTMLDivElement;
+  const content = document.getElementById("content") as HTMLDivElement;
+  const fontSize = document.getElementById("fontSize") as HTMLInputElement;
+  const scrollSpeed = document.getElementById(
+    "scrollSpeed",
+  ) as HTMLInputElement;
+  const fontSizeValue = document.getElementById(
+    "fontSizeValue",
+  ) as HTMLSpanElement;
+  const speedValue = document.getElementById("speedValue") as HTMLSpanElement;
+  const closeButton = document.getElementById("close") as HTMLButtonElement;
+
+  let scrollInterval: ReturnType<typeof setInterval> | null = null;
+  let SCROLL_SPEED = 150; // Default 150 WPM
+  let FONT_SIZE = 8;
+  let animation: ReturnType<typeof animate> | null = null;
+  let isPaused = false;
+
+  // Update display values and content styles
+  fontSize.addEventListener("input", () => {
+    FONT_SIZE = parseInt(fontSize.value);
+    fontSizeValue.textContent = fontSize.value;
+    content.style.fontSize = `${FONT_SIZE}vw`;
+  });
+
+  scrollSpeed.addEventListener("input", () => {
+    SCROLL_SPEED = parseInt(scrollSpeed.value);
+    speedValue.textContent = scrollSpeed.value;
+
+    // Update scroll interval if prompter is active
+    if (scrollInterval) {
+      clearInterval(scrollInterval);
+      startPrompt();
+    }
+  });
+
+  function calculateDuration(text: string, wpm: number): number {
+    // Average word length in English is ~5 characters
+    const wordCount = text.length / 5;
+    // Convert WPM to minutes needed for the text
+    const minutes = wordCount / wpm;
+    // Convert to seconds
+    return minutes * 60;
+  }
+
+  function startPrompt() {
+    if (!script.value.trim()) return;
+
+    // Split text into paragraphs and add spacing
+    const formattedText = script.value
+      .split("\n")
+      .filter((para) => para.trim())
+      .join("\n\n");
+
+    content.textContent = formattedText;
+    content.style.fontSize = `${FONT_SIZE}vw`;
+    prompter.classList.remove("hidden");
+    content.scrollTop = 0;
+
+    // Calculate duration based on text length and scroll speed
+    const duration = calculateDuration(script.value, SCROLL_SPEED);
+
+    // Start animation
+    animation = animate(
+      content,
+      {
+        transform: [
+          "translateY(100vh)",
+          `translateY(-${content.scrollHeight}px)`,
+        ],
+      },
+      {
+        duration: duration,
+        ease: "linear",
+        onComplete: () => {
+          // Auto-close with a 0.5 second delay after animation finishes
+          setTimeout(() => stopPrompt(), 500);
+        },
+      },
+    );
+  }
+
+  function stopPrompt() {
+    if (animation) {
+      animation.cancel();
+      animation = null;
+    }
+    prompter.classList.add("hidden");
+    content.style.transform = "";
+  }
+
+  function togglePause() {
+    if (!animation) return;
+
+    if (isPaused) {
+      animation.play();
+    } else {
+      animation.pause();
+    }
+    isPaused = !isPaused;
+  }
+
+  // Event Listeners
+  start.addEventListener("click", startPrompt);
+  prompter.addEventListener("click", togglePause);
+
+  // Add close button event listener
+  closeButton.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevent triggering pause
+    stopPrompt();
+  });
+
+  // Update scroll speed
+  scrollSpeed.addEventListener("input", () => {
+    SCROLL_SPEED = parseInt(scrollSpeed.value);
+    speedValue.textContent = scrollSpeed.value;
+
+    if (animation) {
+      stopPrompt();
+      startPrompt();
+    }
+  });
+
+  // Handle keyboard events
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      stopPrompt();
+    }
+    if (e.key === " " && !prompter.classList.contains("hidden")) {
+      e.preventDefault();
+      togglePause();
+    }
+  });
+</script>
