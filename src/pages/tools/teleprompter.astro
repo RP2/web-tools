@@ -45,6 +45,16 @@ import Layout from "../../layouts/Layout.astro";
           class="w-48"
         />
       </div>
+      <div class="flex items-center justify-between">
+        <label class="text-sm text-neutral-600" for="mirrorMode">
+          Mirror Text
+        </label>
+        <input
+          type="checkbox"
+          id="mirrorMode"
+          class="h-4 w-4 rounded border-neutral-200 text-neutral-800 focus:ring-neutral-800"
+        />
+      </div>
     </div>
     <button
       id="start"
@@ -95,6 +105,7 @@ import Layout from "../../layouts/Layout.astro";
   ) as HTMLSpanElement;
   const speedValue = document.getElementById("speedValue") as HTMLSpanElement;
   const closeButton = document.getElementById("close") as HTMLButtonElement;
+  const mirrorMode = document.getElementById("mirrorMode") as HTMLInputElement;
 
   let scrollInterval: ReturnType<typeof setInterval> | null = null;
   let SCROLL_SPEED = 150; // Default 150 WPM
@@ -117,6 +128,17 @@ import Layout from "../../layouts/Layout.astro";
     if (scrollInterval) {
       clearInterval(scrollInterval);
       startPrompt();
+    }
+  });
+
+  mirrorMode.addEventListener("change", () => {
+    if (mirrorMode.checked) {
+      content.style.transform = content.style.transform + " scaleX(-1)";
+    } else {
+      content.style.transform = content.style.transform.replace(
+        " scaleX(-1)",
+        "",
+      );
     }
   });
 
@@ -146,13 +168,13 @@ import Layout from "../../layouts/Layout.astro";
     // Calculate duration based on text length and scroll speed
     const duration = calculateDuration(script.value, SCROLL_SPEED);
 
-    // Start animation
+    // Start animation with mirror check
     animation = animate(
       content,
       {
         transform: [
-          "translateY(100vh)",
-          `translateY(-${content.scrollHeight}px)`,
+          `translateY(100vh)${mirrorMode.checked ? " scaleX(-1)" : ""}`,
+          `translateY(-${content.scrollHeight}px)${mirrorMode.checked ? " scaleX(-1)" : ""}`,
         ],
       },
       {
@@ -172,7 +194,7 @@ import Layout from "../../layouts/Layout.astro";
       animation = null;
     }
     prompter.classList.add("hidden");
-    content.style.transform = "";
+    content.style.transform = mirrorMode.checked ? "scaleX(-1)" : "";
   }
 
   function togglePause() {
