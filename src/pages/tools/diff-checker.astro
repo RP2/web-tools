@@ -9,12 +9,12 @@ import Layout from "../../layouts/Layout.astro";
 >
   <a
     href="/"
-    class="absolute top-0 left-0 p-4 text-neutral-600 hover:text-neutral-900 hover:underline"
+    class="absolute top-0 left-0 p-4 text-neutral-500 hover:text-neutral-900 hover:underline"
     >Go Back</a
   >
   <div class="mx-auto flex max-w-2xl flex-col gap-6 p-4">
     <div class="flex items-center justify-end gap-2">
-      <label class="text-sm text-neutral-600">
+      <label class="text-sm text-neutral-500">
         <select
           id="hashMode"
           class="rounded border border-neutral-200 bg-white px-3 py-1.5 font-sans text-neutral-800 focus:border-neutral-400 focus:outline-none"
@@ -92,7 +92,7 @@ import Layout from "../../layouts/Layout.astro";
       if (!validHash1 || !validHash2) {
         const hashType = mode.toUpperCase();
         result.textContent = `Invalid ${hashType} hash format`;
-        result.className = "text-center text-xl font-bold text-yellow-600";
+        result.className = "text-center text-xl font-bold text-yellow-500";
         return;
       }
     } else {
