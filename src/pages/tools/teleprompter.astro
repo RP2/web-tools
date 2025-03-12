@@ -1,4 +1,5 @@
 ---
+import BackButton from "../../components/BackButton.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -7,12 +8,8 @@ import Layout from "../../layouts/Layout.astro";
   description="Free and open-source teleprompter for your presentations, paste in your text and let it scroll."
   tags="free, open source, private, web based, tool, teleprompter, presentation, text, scrolling"
 >
+  <BackButton />
   <div class="mx-auto mt-9 flex max-w-2xl flex-col gap-6 p-4">
-    <a
-      href="/"
-      class="absolute top-0 left-0 p-4 text-neutral-500 hover:text-neutral-900"
-      >Go Back</a
-    >
     <textarea
       id="script"
       placeholder="Paste your script here..."

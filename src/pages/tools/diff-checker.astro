@@ -1,4 +1,5 @@
 ---
+import BackButton from "../../components/BackButton.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -7,11 +8,7 @@ import Layout from "../../layouts/Layout.astro";
   description="Compare two strings or numbers and see if they match, great for verifying hashes."
   tags="free, open source, private, web based, tool, diff, checker, verify, hash"
 >
-  <a
-    href="/"
-    class="absolute top-0 left-0 p-4 text-neutral-500 hover:text-neutral-900 hover:underline"
-    >Go Back</a
-  >
+  <BackButton />
   <div class="mx-auto flex max-w-2xl flex-col gap-6 p-4">
     <div class="flex items-center justify-end gap-2">
       <label class="text-sm text-neutral-500">
