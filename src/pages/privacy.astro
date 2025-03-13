@@ -1,0 +1,46 @@
+---
+import BackButton from "../components/BackButton.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Privacy Policy"
+  description="Privacy Policy for Riley's Web Tools, a small collection of free and open source utilities for your daily tasks."
+  tags="free, open source, private, web-based, tools, privacy policy, data collection, consent, security, cloudflare, google search console"
+>
+  <BackButton />
+  <div class="flex max-w-2xl flex-col gap-2 p-4">
+    <p>
+      This website does not knowingly collect any information, but it does rely
+      on <a
+        class="underline"
+        href="https://www.cloudflare.com/privacypolicy/"
+        rel="nofollow noopener noreferrer"
+        target="_blank">Cloudflare</a
+      > and <a
+        class="underline"
+        href="https://policies.google.com/privacy"
+        rel="nofollow noopener noreferrer"
+        target="_blank">Google Search Console</a
+      > which each have their own privacy policy.
+    </p>
+    <p>
+      While using <a
+        class="underline"
+        href="https://www.cloudflare.com/privacypolicy/"
+        rel="nofollow noopener noreferrer"
+        target="_blank">Cloudflare</a
+      > and <a
+        class="underline"
+        href="https://policies.google.com/privacy"
+        rel="nofollow noopener noreferrer"
+        target="_blank">Google Search Console</a
+      > to improve SEO and security, this may inadvertently share limited site traffic
+      data with them.
+    </p>
+    <p>
+      By using the website, you herby <strong class="font-bold">consent</strong>
+      to the Privacy Policy and agree to its terms.
+    </p>
+  </div>
+</Layout>

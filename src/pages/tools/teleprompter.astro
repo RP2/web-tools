@@ -26,7 +26,7 @@ import Layout from "../../layouts/Layout.astro";
           min="4"
           max="12"
           value="8"
-          class="w-48"
+          class="w-48 cursor-pointer"
         />
       </div>
       <div class="flex items-center justify-between">
@@ -39,7 +39,7 @@ import Layout from "../../layouts/Layout.astro";
           min="50"
           max="200"
           value="150"
-          class="w-48"
+          class="w-48 cursor-pointer"
         />
       </div>
       <div class="flex items-center justify-between">
@@ -49,13 +49,13 @@ import Layout from "../../layouts/Layout.astro";
         <input
           type="checkbox"
           id="mirrorMode"
-          class="h-4 w-4 rounded border-neutral-200 text-neutral-800 focus:ring-neutral-800"
+          class="h-4 w-4 cursor-pointer rounded border-neutral-200 text-neutral-800 focus:ring-neutral-800"
         />
       </div>
     </div>
     <button
       id="start"
-      class="font-roboto mx-auto rounded bg-neutral-800 px-6 py-2 text-white hover:bg-neutral-700"
+      class="font-roboto mx-auto cursor-pointer rounded bg-neutral-800 px-6 py-2 text-white hover:bg-neutral-700"
     >
       Start Teleprompter
     </button>
@@ -63,7 +63,7 @@ import Layout from "../../layouts/Layout.astro";
   <div id="prompter" class="fixed inset-0 hidden bg-black">
     <button
       id="close"
-      class="absolute top-4 right-4 z-10 rounded-full bg-neutral-800 p-2 text-white hover:bg-neutral-700"
+      class="absolute top-4 right-4 z-10 cursor-pointer rounded-full bg-neutral-800 p-2 text-white hover:bg-neutral-700"
       aria-label="Close teleprompter"
     >
       <svg
