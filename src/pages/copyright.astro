@@ -1,6 +1,8 @@
 ---
 import BackButton from "../components/BackButton.astro";
 import Layout from "../layouts/Layout.astro";
+
+const year = new Date().getFullYear();
 ---
 
 <Layout
@@ -9,5 +11,24 @@ import Layout from "../layouts/Layout.astro";
   tags="free, open source, private, web-based, tools, copyright, notice, consent"
 >
   <BackButton />
-  <div class="flex max-w-2xl flex-col gap-2 p-4"></div>
+  <div class="flex max-w-2xl flex-col gap-2 p-4">
+    <p>Copyright © {year} Riley Peralta, all rights reserved.</p>
+    <p>
+      The tools found on this website are open sourced and can be found in the <a
+        href="https://github.com/RP2/web-tools"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        class="underline">Github</a
+      > repository. Feel free to use them for personal or educational purposes, but
+      please do not claim them as your own.
+    </p>
+    <p>
+      The website itself and it's design are just a means of delivery; please do
+      not yoink this work without my permission, doing so will hurt my feelings.
+    </p>
+    <p>
+      By viewing or accessing this website, you <strong>acknowledge</strong> that
+      you have read & agree to these terms of use.
+    </p>
+  </div>
 </Layout>
