@@ -1,0 +1,36 @@
+---
+import BackButton from "../components/BackButton.astro";
+import Title from "../components/Title.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="About These Tools"
+  description="A brief overview of Riley's Web Tools and its features."
+  tags="free, open source, private, web-based, tools, about, overview, features"
+>
+  <BackButton />
+  <Title title="About These Tools" />
+  <div class="flex max-w-2xl flex-col gap-2 p-4">
+    <p>
+      I found myself repeatedly looking up how to do certain tasks online with
+      varying degrees of success. Some results were fine, but the time spent
+      searching and re-searching was becoming increasingly annoying. Many
+      results couldn't be vetted due to the nature of being closed source while
+      others were asking to pay a fee to download; I wanted something that was
+      reliable and free.
+    </p>
+    <p>
+      That's why I decided to make a place where I can put the alternate tools I
+      make for myself; I hope you get as much use out of them as I do.
+    </p>
+    <p>
+      These tools are free and open source, feel free to check out the code on <a
+        href="https://github.com/RP2/web-tools"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        class="underline">GitHub</a
+      >.
+    </p>
+  </div>
+</Layout>
