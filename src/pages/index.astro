@@ -1,8 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+interface ToolModule {
+  file: string;
+  url: string;
+}
+// Import all tool modules from the tools directory
 const tools = Object.values(
-  import.meta.glob("./tools/*.astro", { eager: true }),
+  import.meta.glob<ToolModule>("./tools/*.astro", { eager: true }),
 );
+// Filter out the index.astro file from tools array
+const filteredTools = tools.filter((tool) => {
+  const filename = tool.file.split("/").pop();
+  return filename !== "index.astro";
+});
 ---
 
 <Layout
@@ -14,7 +25,7 @@ const tools = Object.values(
     class="mt-4 ml-5 space-y-2 text-4xl font-semibold md:mt-8 md:ml-9 md:space-y-4 md:text-8xl"
   >
     {
-      tools.map((tool: any) => (
+      filteredTools.map((tool: any) => (
         <li>
           <a class="hover:underline" href={tool.url}>
             {tool.url

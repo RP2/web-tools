@@ -51,19 +51,19 @@ import Layout from "../../layouts/Layout.astro";
   const count1 = document.getElementById("count1") as HTMLDivElement;
   const count2 = document.getElementById("count2") as HTMLDivElement;
   const hashMode = document.getElementById("hashMode") as HTMLSelectElement;
-
+  // Define the regex for hash validation
   const HASH_REGEX = {
     md5: /^[a-fA-F0-9]{32}$/,
     sha1: /^[a-fA-F0-9]{40}$/,
     sha256: /^[a-fA-F0-9]{64}$/,
     sha512: /^[a-fA-F0-9]{128}$/,
   };
-
+  // Function to validate the hash format based on the selected mode
   function validateHash(text: string, mode: string): boolean {
     if (mode === "none") return true;
     return HASH_REGEX[mode as keyof typeof HASH_REGEX].test(text);
   }
-
+  // Function to update the character count display
   function updateCharCount(
     input: HTMLTextAreaElement,
     display: HTMLDivElement,
@@ -71,7 +71,7 @@ import Layout from "../../layouts/Layout.astro";
     const count = input.value.length;
     display.textContent = `Characters: ${count}`;
   }
-
+  // Function to compare the two inputs and display the result
   function compareInputs() {
     let text1 = input1.value;
     let text2 = input2.value;
