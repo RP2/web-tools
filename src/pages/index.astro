@@ -27,7 +27,7 @@ const filteredTools = tools.filter((tool) => {
     {
       filteredTools.map((tool: any) => (
         <li>
-          <a class="hover:underline" href={tool.url}>
+          <a class="hover:underline" href={tool.url + "/"}>
             {tool.url
               .split("/")
               .pop()

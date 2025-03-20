@@ -18,7 +18,7 @@ const breadcrumbs = currentPath.map((path, index) => {
           {index === breadcrumbs.length - 1 ? (
             <span class="text-neutral-500">{crumb.text}</span>
           ) : (
-            <a href={crumb.url} class="text-neutral-800 hover:underline">
+            <a href={crumb.url + "/"} class="text-neutral-800 hover:underline">
               {crumb.text}
             </a>
           )}
