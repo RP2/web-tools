@@ -10,11 +10,11 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/sitemap": "^3.3.0",
     "@fontsource/roboto": "^5.2.5",
     "@fontsource/roboto-mono": "^5.2.5",
     "@tailwindcss/vite": "^4.0.9",
-    "astro": "^5.4.2",
+    "astro": "^5.5.4",
     "motion": "^12.4.10",
     "tailwindcss": "^4.0.9"
   },

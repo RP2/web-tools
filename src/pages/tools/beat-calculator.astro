@@ -1,0 +1,136 @@
+---
+import BackButton from "../../components/BackButton.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="Beat Per Value Calculator - Riley's Web Tools"
+  description="Find the rate at which a song or other audio/visual cue can be measured in beats occurs per unit of time; this is useful for music production and analysis. The value at which the cue is measured can be adjusted based on the specific use case."
+  tags="free, open source, private, web based, tool, bpm, variable measurement, per hour, per day, calculator, music production, audio analysis"
+>
+  <BackButton />
+  <div class="mx-auto mt-9 flex max-w-2xl flex-col gap-6 p-4">
+    <div class="flex flex-col items-center gap-4">
+      <button
+        id="tapButton"
+        class="font-roboto h-32 w-32 rounded-full bg-neutral-800 text-lg text-white transition-all hover:bg-neutral-700 active:scale-95"
+      >
+        Tap to sample
+      </button>
+    </div>
+    <div class="flex flex-col gap-4 rounded border border-neutral-200 p-4">
+      <div class="flex items-center justify-between">
+        <span class="text-2xl font-medium" id="result">No sample data yet</span>
+        <select
+          id="timeUnit"
+          class="rounded border border-neutral-200 bg-white px-3 py-1.5 font-sans text-neutral-800 focus:border-neutral-400 focus:outline-none"
+        >
+          <option value="60">BPM (per minute)</option>
+          <option value="3600">BPH (per hour)</option>
+          <option value="86400">BPD (per day)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const tapButton = document.getElementById("tapButton") as HTMLButtonElement;
+  const result = document.getElementById("result") as HTMLSpanElement;
+  const timeUnit = document.getElementById("timeUnit") as HTMLSelectElement;
+
+  let taps: number[] = [];
+  let lastValidBPS: number | null = null; // Store the last valid beats per second
+  let isRecording = false;
+  let startTime: number;
+  let cooldownActive = false;
+  const SAMPLE_DURATION = 5000; // 5 seconds
+  const COOLDOWN_DURATION = 1000; // 1 second cooldown
+  let cooldownTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  function resetCooldownTimer() {
+    if (cooldownTimeout) {
+      clearTimeout(cooldownTimeout);
+    }
+
+    // Reset all states and UI when cooldown ends
+    cooldownTimeout = setTimeout(() => {
+      cooldownActive = false;
+      isRecording = false;
+      taps = [];
+      tapButton.textContent = "Tap to sample";
+      tapButton.classList.remove(
+        "bg-neutral-600",
+        "opacity-50",
+        "cursor-not-allowed",
+      );
+    }, COOLDOWN_DURATION);
+  }
+
+  function startRecording() {
+    if (cooldownActive) {
+      resetCooldownTimer();
+      return;
+    }
+
+    taps = [];
+    isRecording = true;
+    startTime = Date.now();
+    tapButton.textContent = "Sampling...";
+    tapButton.classList.add("bg-neutral-600");
+  }
+
+  function stopRecording() {
+    isRecording = false;
+    cooldownActive = true;
+    tapButton.textContent = "Wait...";
+    tapButton.classList.add("opacity-50", "cursor-not-allowed");
+    calculateBPM();
+    resetCooldownTimer();
+  }
+
+  function formatNumber(num: number): string {
+    return num.toLocaleString("en-US");
+  }
+
+  function calculateBPM() {
+    if (taps.length < 2) return;
+
+    const totalTime = (taps[taps.length - 1] - taps[0]) / 1000; // Convert to seconds
+    const beats = taps.length - 1;
+    const bps = beats / totalTime;
+
+    // Store the base rate (beats per second)
+    lastValidBPS = bps;
+
+    const multiplier = parseInt(timeUnit.value);
+    const value = Math.round(bps * multiplier);
+
+    result.textContent = formatNumber(value);
+  }
+
+  tapButton.addEventListener("click", () => {
+    if (cooldownActive) {
+      resetCooldownTimer();
+      return;
+    }
+
+    if (!isRecording) {
+      startRecording();
+    }
+
+    taps.push(Date.now());
+
+    if (isRecording && Date.now() - startTime >= SAMPLE_DURATION) {
+      stopRecording();
+    }
+  });
+
+  timeUnit.addEventListener("change", () => {
+    if (lastValidBPS !== null) {
+      const multiplier = parseInt(timeUnit.value);
+      const value = Math.round(lastValidBPS * multiplier);
+      result.textContent = formatNumber(value);
+    }
+  });
+</script>
