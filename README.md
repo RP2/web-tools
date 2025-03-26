@@ -10,4 +10,8 @@ The teleprompter tool allows you to display text on a screen as it scrolls, whic
 
 The diff checker tool compares two pieces of text and highlights the differences between them. This can be useful for reviewing code changes or comparing documents. There is also an option to select a hash type (MD5, SHA-1, etc.) if you need to compare files.
 
+## Beat Calculator
+
+Measures the tempo at a selected time interval and displays the value after sampling the rate at which the button is pressed for 5 seconds. This can be helpful for determining the rough BPM of a song or how many rotations a motor makes per hour or day depending on selected time interval.
+
 You can find more information about each tool in their respective directories.

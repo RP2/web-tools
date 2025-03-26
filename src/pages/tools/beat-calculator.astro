@@ -13,7 +13,7 @@ import Layout from "../../layouts/Layout.astro";
     <div class="flex flex-col items-center gap-4">
       <button
         id="tapButton"
-        class="font-roboto h-32 w-32 rounded-full bg-neutral-800 text-lg text-white transition-all hover:bg-neutral-700 active:scale-95"
+        class="font-roboto h-32 w-32 touch-manipulation rounded-full bg-neutral-800 text-lg text-white transition-all hover:bg-neutral-700 active:scale-95"
       >
         Tap to sample
       </button>
@@ -23,7 +23,7 @@ import Layout from "../../layouts/Layout.astro";
         <span class="text-2xl font-medium" id="result">No sample data yet</span>
         <select
           id="timeUnit"
-          class="rounded border border-neutral-200 bg-white px-3 py-1.5 font-sans text-neutral-800 focus:border-neutral-400 focus:outline-none"
+          class="touch-manipulation rounded border border-neutral-200 bg-white px-3 py-1.5 font-sans text-neutral-800 focus:border-neutral-400 focus:outline-none"
         >
           <option value="60">BPM (per minute)</option>
           <option value="3600">BPH (per hour)</option>
@@ -33,6 +33,13 @@ import Layout from "../../layouts/Layout.astro";
     </div>
   </div>
 </Layout>
+
+<style>
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+</style>
 
 <script>
   const tapButton = document.getElementById("tapButton") as HTMLButtonElement;
