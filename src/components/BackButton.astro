@@ -1,11 +1,14 @@
 ---
 const currentPath = Astro.url.pathname.split("/").filter(Boolean);
-
 // Build paths for each breadcrumb level (reusable)
-const breadcrumbs = currentPath.map((path, index) => {
-  const url = "/" + currentPath.slice(0, index + 1).join("/");
-  return { text: path, url };
-});
+const breadcrumbs = currentPath
+  .filter((path) => path !== "tools") // Filter out desired word from breadcrumbs
+  .map((path) => {
+    // Include filtered path in URL as needed (span if current page)
+    const urlParts = currentPath.slice(0, currentPath.indexOf(path) + 1);
+    const url = "/" + urlParts.join("/");
+    return { text: path, url };
+  });
 ---
 
 <nav aria-label="Breadcrumb" class="p-4">
